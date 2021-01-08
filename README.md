@@ -1,57 +1,69 @@
 <div align="center">
-  <a href="https://github.com/reviewdog/reviewdog">
-    <img alt="reviewdog" src="https://raw.githubusercontent.com/haya14busa/i/d598ed7dc49fefb0018e422e4c43e5ab8f207a6b/reviewdog/reviewdog.logo.png">
-  </a>
+    <a href="https://github.com/reviewdog/reviewdog">
+        <img alt="reviewdog"
+            src="https://raw.githubusercontent.com/haya14busa/i/d598ed7dc49fefb0018e422e4c43e5ab8f207a6b/reviewdog/reviewdog.logo.png">
+    </a>
 </div>
 
 <h2 align="center">
-  reviewdog - A code review dog who keeps your codebase healthy.
+    reviewdog - A code review dog who keeps your codebase healthy.
 </h2>
 
 <div align="center">
-  <a href="./LICENSE">
-    <img alt="LICENSE" src="https://img.shields.io/badge/license-MIT-blue.svg?maxAge=43200">
-  </a>
-  <a href="https://godoc.org/github.com/reviewdog/reviewdog">
-    <img alt="GoDoc" src="https://img.shields.io/badge/godoc-reference-4F73B3.svg?label=godoc.org&maxAge=43200&logo=go">
-  </a>
-  <a href="./CHANGELOG.md">
-    <img alt="releases" src="https://img.shields.io/github/release/reviewdog/reviewdog.svg?logo=github">
-  </a>
-  <a href="https://github.com/reviewdog/nightly">
-    <img alt="nightly releases" src="https://img.shields.io/github/v/release/reviewdog/nightly.svg?logo=github">
-  </a>
+    <a href="./LICENSE">
+        <img alt="LICENSE" src="https://img.shields.io/badge/license-MIT-blue.svg?maxAge=43200">
+    </a>
+    <a href="https://godoc.org/github.com/reviewdog/reviewdog">
+        <img alt="GoDoc"
+            src="https://img.shields.io/badge/godoc-reference-4F73B3.svg?label=godoc.org&maxAge=43200&logo=go">
+    </a>
+    <a href="./CHANGELOG.md">
+        <img alt="releases" src="https://img.shields.io/github/release/reviewdog/reviewdog.svg?logo=github">
+    </a>
+    <a href="https://github.com/reviewdog/nightly">
+        <img alt="nightly releases" src="https://img.shields.io/github/v/release/reviewdog/nightly.svg?logo=github">
+    </a>
 </div>
 
 <div align="center">
-  <a href="https://github.com/reviewdog/reviewdog/actions?query=workflow%3AGo+event%3Apush+branch%3Amaster">
-    <img alt="GitHub Actions" src="https://github.com/reviewdog/reviewdog/workflows/Go/badge.svg">
-  </a>
-  <a href="https://github.com/reviewdog/reviewdog/actions?query=workflow%3Areviewdog+event%3Apush+branch%3Amaster">
-    <img alt="reviewdog" src="https://github.com/reviewdog/reviewdog/workflows/reviewdog/badge.svg?branch=master&event=push">
-  </a>
-  <a href="https://github.com/reviewdog/reviewdog/actions?query=workflow%3Arelease">
-    <img alt="release" src="https://github.com/reviewdog/reviewdog/workflows/release/badge.svg">
-  </a>
-  <a href="https://travis-ci.org/reviewdog/reviewdog"><img alt="Travis Status" src="https://img.shields.io/travis/reviewdog/reviewdog/master.svg?label=Travis&logo=travis"></a>
-  <a href="https://circleci.com/gh/reviewdog/reviewdog"><img alt="CircleCI Status" src="http://img.shields.io/circleci/build/github/reviewdog/reviewdog/master.svg?label=CircleCI&logo=circleci"></a>
-  <a href="https://codecov.io/github/reviewdog/reviewdog"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/reviewdog/reviewdog/master.svg?logo=codecov"></a>
+    <a href="https://github.com/reviewdog/reviewdog/actions?query=workflow%3AGo+event%3Apush+branch%3Amaster">
+        <img alt="GitHub Actions" src="https://github.com/reviewdog/reviewdog/workflows/Go/badge.svg">
+    </a>
+    <a href="https://github.com/reviewdog/reviewdog/actions?query=workflow%3Areviewdog+event%3Apush+branch%3Amaster">
+        <img alt="reviewdog"
+            src="https://github.com/reviewdog/reviewdog/workflows/reviewdog/badge.svg?branch=master&event=push">
+    </a>
+    <a href="https://github.com/reviewdog/reviewdog/actions?query=workflow%3Arelease">
+        <img alt="release" src="https://github.com/reviewdog/reviewdog/workflows/release/badge.svg">
+    </a>
+    <a href="https://travis-ci.org/reviewdog/reviewdog"><img alt="Travis Status"
+            src="https://img.shields.io/travis/reviewdog/reviewdog/master.svg?label=Travis&logo=travis"></a>
+    <a href="https://circleci.com/gh/reviewdog/reviewdog"><img alt="CircleCI Status"
+            src="http://img.shields.io/circleci/build/github/reviewdog/reviewdog/master.svg?label=CircleCI&logo=circleci"></a>
+    <a href="https://codecov.io/github/reviewdog/reviewdog"><img alt="Coverage Status"
+            src="https://img.shields.io/codecov/c/github/reviewdog/reviewdog/master.svg?logo=codecov"></a>
 </div>
 
 <div align="center">
-  <a href="https://gitlab.com/reviewdog/reviewdog/pipelines">
-    <img alt="GitLab Supported" src="https://img.shields.io/badge/GitLab%20-Supported-fc6d26?logo=gitlab">
-  </a>
-  <a href="https://github.com/haya14busa/action-bumpr">
-    <img alt="action-bumpr supported" src="https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr">
-  </a>
-  <a href="https://github.com/reviewdog/.github/blob/master/CODE_OF_CONDUCT.md">
-    <img alt="Contributor Covenant" src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg">
-  </a>
-  <a href="https://somsubhra.com/github-release-stats/?username=reviewdog&repository=reviewdog">
-    <img alt="Github Releases Stats" src="https://img.shields.io/github/downloads/reviewdog/reviewdog/total.svg?logo=github">
-  </a>
-  <a href="https://starcharts.herokuapp.com/reviewdog/reviewdog"><img alt="Stars" src="https://img.shields.io/github/stars/reviewdog/reviewdog.svg?style=social"></a>
+    <a href="https://gitlab.com/reviewdog/reviewdog/pipelines">
+        <img alt="GitLab Supported" src="https://img.shields.io/badge/GitLab%20-Supported-fc6d26?logo=gitlab">
+    </a>
+    <a href="https://github.com/haya14busa/action-bumpr">
+        <img alt="action-bumpr supported"
+            src="https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr">
+    </a>
+    <a href="https://github.com/reviewdog/.github/blob/master/CODE_OF_CONDUCT.md">
+        <img alt="Contributor Covenant"
+            src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg">
+    </a>
+    <a href="https://somsubhra.com/github-release-stats/?username=reviewdog&repository=reviewdog">
+        <img alt="Github Releases Stats"
+            src="https://img.shields.io/github/downloads/reviewdog/reviewdog/total.svg?logo=github">
+    </a>
+    <a href="https://starcharts.herokuapp.com/reviewdog/reviewdog"><img alt="Stars"
+            src="https://img.shields.io/github/stars/reviewdog/reviewdog.svg?style=social"></a>
+    <a href="https://bitbucket.org/reviewdog/reviewdog/addon/pipelines/home#!/results/branch/master/page/1"><img alt="Bitbucket Pipelines"
+            src="https://img.shields.io/bitbucket/pipelines/reviewdog/reviewdog/master?label=bitbucket&logo=bitbucket"></a>
 </div>
 <br />
 

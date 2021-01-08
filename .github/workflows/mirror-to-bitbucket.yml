@@ -1,0 +1,27 @@
+name: Mirror to bitbucket
+
+on:
+  push:
+    branches:
+      - master
+      - release-*
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  to_bitbucket:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v1
+      # - run: git checkout -b $GITHUB_REPOSITORY/${GITHUB_HEAD_REF#refs/heads/ 
+      - run: git checkout -b taras-test
+      - uses: spyoungtech/mirror-action@master
+        with:
+          REMOTE: git@bitbucket.org:reviewdog/reviewdog.git
+          GIT_SSH_PRIVATE_KEY: ${{ secrets.BITBUCKET_SSH_PRIVATE_KEY }}
+          GIT_SSH_NO_VERIFY_HOST: "true"
+          PUSH_ALL_REFS: "false"
+          GIT_PUSH_ARGS: "-f"
+          # # https://support.atlassian.com/bitbucket-cloud/docs/configure-ssh-and-two-step-verification/
+          # GIT_SSH_KNOWN_HOSTS: |
+          #   bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==

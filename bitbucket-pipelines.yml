@@ -1,0 +1,17 @@
+pipelines:
+  default:
+    - step:
+        name: Reviewdog
+        image: golangci/golangci-lint:v1.32-alpine
+        script:
+          - go install ./cmd/reviewdog
+          # Install linters.
+          - cd linters
+          - go get golang.org/x/lint/golint
+          - go get github.com/kisielk/errcheck
+          - go get honnef.co/go/tools/cmd/staticcheck
+          - go get github.com/client9/misspell/cmd/misspell
+          - go get mvdan.cc/unparam
+          - go get github.com/mgechev/revive
+          - cd -
+          - reviewdog -reporter=bitbucket-code-report
