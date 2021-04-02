@@ -84,6 +84,7 @@ by diff.
   * [Reporter: GitLab MergeRequest discussions (-reporter=gitlab-mr-discussion)](#reporter-gitlab-mergerequest-discussions--reportergitlab-mr-discussion)
   * [Reporter: GitLab MergeRequest commit (-reporter=gitlab-mr-commit)](#reporter-gitlab-mergerequest-commit--reportergitlab-mr-commit)
   * [Reporter: Bitbucket Code Insights Reports (-reporter=bitbucket-code-report)](#reporter-bitbucket-code-insights-reports--reporterbitbucket-code-report)
+  * [Reporter: Bitbucket Server PullRequest review comment  (-reporter=bitbucket-pr-review)](#reporter-bitbucket-server-pullrequest-review-comment--reporterbitbucket-pr-review)
 - [Supported CI services](#supported-ci-services)
   * [GitHub Actions](#github-actions)
   * [Travis CI](#travis-ci)
@@ -305,6 +306,7 @@ Note that not all reporters provide support of code suggestion.
 | **`gitlab-mr-commit`**       | NO [2]  |
 | **`gerrit-change-review`**   | NO [1]  |
 | **`bitbucket-code-report`**  | NO [2]  |
+| **`bitbucket-pr-review`**    | NO [2]  |
 
 - [1] The reporter service support code suggestion feature, but reviewdog does not support it yet. See [#678](https://github.com/reviewdog/reviewdog/issues/678) for the status.
 - [2] The reporter service itself doesn't support code suggestion feature.
@@ -550,6 +552,21 @@ If running locally or from some other CI system you would need to provide Bitbuc
 $ export BITBUCKET_USER="my_user"
 $ export BITBUCKET_PASSWORD="my_password"
 $ reviewdog -reporter=bitbucket-code-report
+```
+
+### Reporter: Bitbucket Server PullRequest review comment  (-reporter=bitbucket-pr-review)
+
+bitbucket-pr-review reporter reports results to Bitbucket Server PullRequest review comments
+
+- For Basic Auth you need to set following env variables:
+    `BITBUCKET_USER` and `BITBUCKET_PASSWORD`
+- For AccessToken Auth you need to set `BITBUCKET_ACCESS_TOKEN`
+
+```shell
+$ export BITBUCKET_USER="my_user"
+$ export BITBUCKET_PASSWORD="my_password"
+$ export BITBUCKET_API="https://<bitbucket-host>/rest"
+$ reviewdog -reporter=bitbucket-pr-review
 ```
 
 ## Supported CI services
@@ -884,6 +901,7 @@ so reviewdog will use [Check annotation](https://developer.github.com/v3/checks/
 | **`gitlab-mr-commit`**       | OK      | Partially Supported [2] | Partially Supported [2] | Partially Supported [2] |
 | **`gerrit-change-review`**   | OK      | OK? [3]        | OK? [3]                 | Partially Supported? [2][3] |
 | **`bitbucket-code-report`**  | NO [4]  | NO [4]         | NO [4]                  | OK |
+| **`bitbucket-pr-review`**    | OK      | OK             | OK                      | Partially Supported [2] |
 
 - [1] Report results which is outside diff context with Check annotation as fallback if it's running in GitHub actions instead of Review API (comments). All results will be reported to console as well.
 - [2] Report results which is outside diff file to console.

@@ -7,6 +7,7 @@ require (
 	cloud.google.com/go/datastore v1.1.0
 	contrib.go.opencensus.io/exporter/stackdriver v0.13.5
 	github.com/bradleyfalzon/ghinstallation v1.1.1
+	github.com/gfleury/go-bitbucket-v1 v0.0.0-20210119103841-412cc3323e5e
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-cmp v0.5.5
 	github.com/google/go-github/v33 v33.0.0

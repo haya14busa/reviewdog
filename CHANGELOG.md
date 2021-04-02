@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### :rocket: Enhancements
 - [#888](https://github.com/reviewdog/reviewdog/pull/888) Allow GitHub PR reporting for a forked repository iff it's triggered by `pull_request_target`
+- [#911](https://github.com/reviewdog/reviewdog/pull/911) Added bitbucket server (v1 api) support
 
 ### :bug: Fixes
 - ...

@@ -77,6 +77,29 @@ func MarkdownComment(c *reviewdog.Comment) string {
 	return sb.String()
 }
 
+// BitBucketMarkdownComment creates BitBucket markdown comment (it has very restricted markdown support in comments)
+func BitBucketMarkdownComment(c *reviewdog.Comment) string {
+	var sb strings.Builder
+	if s := severity(c); s != "" {
+		sb.WriteString(s)
+		sb.WriteString(" ")
+	}
+	if tool := toolName(c); tool != "" {
+		sb.WriteString(fmt.Sprintf("**[%s]** ", tool))
+	}
+	if code := c.Result.Diagnostic.GetCode().GetValue(); code != "" {
+		if url := c.Result.Diagnostic.GetCode().GetUrl(); url != "" {
+			sb.WriteString(fmt.Sprintf("<[%s](%s)> ", code, url))
+		} else {
+			sb.WriteString(fmt.Sprintf("<%s> ", code))
+		}
+	}
+	// Add markdown's hard line break
+	sb.WriteString("  \n")
+	sb.WriteString(c.Result.Diagnostic.GetMessage())
+	return sb.String()
+}
+
 func toolName(c *reviewdog.Comment) string {
 	if name := c.Result.Diagnostic.GetSource().GetName(); name != "" {
 		return name
