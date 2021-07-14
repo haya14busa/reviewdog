@@ -120,6 +120,33 @@ func TestGitLabMergeRequestDiscussionCommenter_Post_Flush_review_api(t *testing.
 			InDiffFile: true,
 		},
 	}
+	newCommentWithSuggestion := &reviewdog.Comment{
+		Result: &filter.FilteredDiagnostic{
+			Diagnostic: &rdf.Diagnostic{
+				Location: &rdf.Location{
+					Path: "file3.go",
+					Range: &rdf.Range{Start: &rdf.Position{
+						Line: 14,
+					}},
+				},
+				Message: "new comment with suggestion",
+				Suggestions: []*rdf.Suggestion{
+					{
+						Text: "line1-fixed\nline2-fixed",
+						Range: &rdf.Range{
+							Start: &rdf.Position{
+								Line: 14,
+							},
+							End: &rdf.Position{
+								Line: 15,
+							},
+						},
+					},
+				},
+			},
+			InDiffFile: true,
+		},
+	}
 
 	comments := []*reviewdog.Comment{
 		alreadyCommented1,
@@ -129,9 +156,10 @@ func TestGitLabMergeRequestDiscussionCommenter_Post_Flush_review_api(t *testing.
 		newComment3,
 		commentOutsideDiff,
 		commentWithoutLnum,
+		newCommentWithSuggestion,
 	}
 	var postCalled int32
-	const wantPostCalled = 3
+	const wantPostCalled = 4
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/v4/projects/o/r/merge_requests/14/discussions", func(w http.ResponseWriter, r *http.Request) {
@@ -215,6 +243,18 @@ func TestGitLabMergeRequestDiscussionCommenter_Post_Flush_review_api(t *testing.
 						NewPath: "new_file.go", NewLine: 14,
 						OldPath: "old_file.go", OldLine: 7,
 					},
+				}
+				if diff := cmp.Diff(got, want); diff != "" {
+					t.Error(diff)
+				}
+			case "file3.go":
+				suggestions := commentutil.MarkdownSuggestions(newCommentWithSuggestion)
+				bodyExpected := commentutil.MarkdownComment(newCommentWithSuggestion) + "\n\n" + suggestions
+
+				want := &gitlab.CreateMergeRequestDiscussionOptions{
+					Body: gitlab.String(bodyExpected),
+					Position: &gitlab.NotePosition{
+						BaseSHA: "xxx", StartSHA: "xxx", HeadSHA: "sha", PositionType: "text", NewPath: "file3.go", NewLine: 14},
 				}
 				if diff := cmp.Diff(got, want); diff != "" {
 					t.Error(diff)

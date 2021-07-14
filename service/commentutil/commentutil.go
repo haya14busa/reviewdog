@@ -77,6 +77,35 @@ func MarkdownComment(c *reviewdog.Comment) string {
 	return sb.String()
 }
 
+// MarkdownSuggestions creates diff in markdown for suggested changes
+func MarkdownSuggestions(c *reviewdog.Comment) string {
+	suggestions := c.Result.Diagnostic.GetSuggestions()
+	if len(suggestions) == 0 {
+		return ""
+	}
+
+	var sb strings.Builder
+
+	suggestionsRendered := 0
+	for _, s := range suggestions {
+		if s.Range == nil || s.Range.Start == nil || s.Range.End == nil {
+			continue
+		}
+		if suggestionsRendered > 0 {
+			sb.WriteString("\n\n")
+		}
+		sb.WriteString("```suggestion:-0+")
+		sb.WriteString(fmt.Sprintf("%d", s.Range.End.Line-s.Range.Start.Line))
+		sb.WriteString("\n")
+		sb.WriteString(strings.Trim(s.GetText(), "\n"))
+		sb.WriteString("\n```")
+
+		suggestionsRendered++
+	}
+
+	return sb.String()
+}
+
 func toolName(c *reviewdog.Comment) string {
 	if name := c.Result.Diagnostic.GetSource().GetName(); name != "" {
 		return name

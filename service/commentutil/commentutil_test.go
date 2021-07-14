@@ -108,3 +108,140 @@ func TestCommentBody(t *testing.T) {
 		}
 	}
 }
+
+func TestMarkdownSuggestions(t *testing.T) {
+	tests := []struct {
+		in   *reviewdog.Comment
+		want string
+	}{
+		{
+			in: &reviewdog.Comment{
+				ToolName: "tool-name",
+				Result: &filter.FilteredDiagnostic{
+					Diagnostic: &rdf.Diagnostic{
+						Message: "no suggestion",
+					},
+				},
+			},
+			want: "",
+		},
+		{
+			in: buildTestComment(
+				"one suggestion",
+				[]*rdf.Suggestion{
+					buildTestsSuggestion("line1-fixed\nline2-fixed", 10, 10),
+				},
+			),
+			want: strings.Join([]string{
+				"```suggestion:-0+0",
+				"line1-fixed",
+				"line2-fixed",
+				"```",
+			}, "\n"),
+		},
+		{
+			in: buildTestComment(
+				"two suggestions",
+				[]*rdf.Suggestion{
+					buildTestsSuggestion("line1-fixed\nline2-fixed", 10, 11),
+					buildTestsSuggestion("line3-fixed\nline4-fixed", 20, 21),
+				},
+			),
+			want: strings.Join([]string{
+				"```suggestion:-0+1",
+				"line1-fixed",
+				"line2-fixed",
+				"```",
+				"",
+				"```suggestion:-0+1",
+				"line3-fixed",
+				"line4-fixed",
+				"```",
+			}, "\n"),
+		},
+	}
+	for _, tt := range tests {
+		suggestion := MarkdownSuggestions(tt.in)
+		if suggestion != tt.want {
+			t.Errorf("got unexpected suggestion.\ngot:\n%s\nwant:\n%s", suggestion, tt.want)
+		}
+	}
+}
+
+func TestMarkdownSuggestionsInvalid(t *testing.T) {
+	tests := []struct {
+		in   *reviewdog.Comment
+		want string
+	}{
+		{
+			in: buildTestComment(
+				"two suggestions, one without range",
+				[]*rdf.Suggestion{
+					{
+						Text: "line3-fixed\nline4-fixed",
+					},
+					buildTestsSuggestion("line1-fixed\nline2-fixed", 10, 11),
+				},
+			),
+			want: strings.Join([]string{
+				"```suggestion:-0+1",
+				"line1-fixed",
+				"line2-fixed",
+				"```",
+			}, "\n"),
+		},
+		{
+			in: buildTestComment(
+				"two suggestions, one without range end",
+				[]*rdf.Suggestion{
+					{
+						Text: "line3-fixed\nline4-fixed",
+						Range: &rdf.Range{
+							Start: &rdf.Position{
+								Line: 20,
+							},
+						},
+					},
+					buildTestsSuggestion("line1-fixed\nline2-fixed", 10, 11),
+				}),
+			want: strings.Join([]string{
+				"```suggestion:-0+1",
+				"line1-fixed",
+				"line2-fixed",
+				"```",
+			}, "\n"),
+		},
+	}
+	for _, tt := range tests {
+		suggestion := MarkdownSuggestions(tt.in)
+		if suggestion != tt.want {
+			t.Errorf("got unexpected suggestion.\ngot:\n%s\nwant:\n%s", suggestion, tt.want)
+		}
+	}
+}
+
+func buildTestsSuggestion(text string, start int32, end int32) *rdf.Suggestion {
+	return &rdf.Suggestion{
+		Text: text,
+		Range: &rdf.Range{
+			Start: &rdf.Position{
+				Line: start,
+			},
+			End: &rdf.Position{
+				Line: end,
+			},
+		},
+	}
+}
+
+func buildTestComment(message string, suggestions []*rdf.Suggestion) *reviewdog.Comment {
+	return &reviewdog.Comment{
+		ToolName: "tool-name",
+		Result: &filter.FilteredDiagnostic{
+			Diagnostic: &rdf.Diagnostic{
+				Message:     message,
+				Suggestions: suggestions,
+			},
+		},
+	}
+}
