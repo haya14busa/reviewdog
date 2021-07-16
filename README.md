@@ -552,6 +552,14 @@ $ export BITBUCKET_PASSWORD="my_password"
 $ reviewdog -reporter=bitbucket-code-report
 ```
 
+To post report to Bitbucket Server use `BITBUCKET_SERVER_URL` variable:
+```shell
+$ export BITBUCKET_USER="my_user"
+$ export BITBUCKET_PASSWORD="my_password"
+$ export BITBUCKET_SERVER_URL="https://bitbucket.my-company.com"
+$ reviewdog -reporter=bitbucket-code-report
+```
+
 ## Supported CI services
 
 ### [GitHub Actions](https://github.com/features/actions)
