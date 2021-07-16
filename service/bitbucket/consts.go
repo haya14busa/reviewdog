@@ -1,6 +1,10 @@
 package bitbucket
 
+import "time"
+
 const (
+	httpTimeout = time.Second * 10
+
 	reportTypeBug = "BUG"
 	// reportTypeSecurity = "SECURITY"
 	// reportTypeCoverage = "COVERAGE"

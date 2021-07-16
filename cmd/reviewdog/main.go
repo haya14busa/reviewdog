@@ -25,7 +25,6 @@ import (
 	"github.com/reviewdog/errorformat/fmts"
 	"github.com/xanzy/go-gitlab"
 
-	"github.com/reviewdog/go-bitbucket"
 	"github.com/reviewdog/reviewdog"
 	"github.com/reviewdog/reviewdog/cienv"
 	"github.com/reviewdog/reviewdog/commands"
@@ -165,8 +164,9 @@ const (
 		(see documentation below for local reporters) and BitBucket credentials:
 		- For Basic Auth you need to set following env variables:
 			  BITBUCKET_USER and BITBUCKET_PASSWORD
-		- For AccessToken Auth you need to set BITBUCKET_ACCESS_TOKEN 
-		Running on Bitbucket Server is not tested/supported yet.
+		- For AccessToken Auth you need to set BITBUCKET_ACCESS_TOKEN
+		
+		To post results to Bitbucket Server specify BITBUCKET_SERVER_URL.
 
 	For GitHub Enterprise and self hosted GitLab, set
 	REVIEWDOG_INSECURE_SKIP_VERIFY to skip verifying SSL (please use this at your own risk)
@@ -610,7 +610,7 @@ func gerritBuildWithClient() (*cienv.BuildInfo, *gerrit.Client, error) {
 	return buildInfo, client, nil
 }
 
-func bitbucketBuildWithClient(ctx context.Context) (*cienv.BuildInfo, *bitbucket.APIClient, context.Context, error) {
+func bitbucketBuildWithClient(ctx context.Context) (*cienv.BuildInfo, bbservice.APIClient, context.Context, error) {
 	build, _, err := cienv.GetBuildInfo()
 	if err != nil {
 		return nil, nil, ctx, err
@@ -619,16 +619,20 @@ func bitbucketBuildWithClient(ctx context.Context) (*cienv.BuildInfo, *bitbucket
 	bbUser := os.Getenv("BITBUCKET_USER")
 	bbPass := os.Getenv("BITBUCKET_PASSWORD")
 	bbAccessToken := os.Getenv("BITBUCKET_ACCESS_TOKEN")
+	bbServerURL := os.Getenv("BITBUCKET_SERVER_URL")
 
-	if bbUser != "" && bbPass != "" {
-		ctx = bbservice.WithBasicAuth(ctx, bbUser, bbPass)
+	var client bbservice.APIClient
+	if bbServerURL != "" {
+		ctx, err = bbservice.BuildServerAPIContext(ctx, bbServerURL, bbUser, bbPass, bbAccessToken)
+		if err != nil {
+			return nil, nil, ctx, err
+		}
+		client = bbservice.NewServerAPIClient()
+	} else {
+		ctx = bbservice.BuildCloudAPIContext(ctx, bbUser, bbPass, bbAccessToken)
+		client = bbservice.NewCloudAPIClient(cienv.IsInBitbucketPipeline())
 	}
 
-	if bbAccessToken != "" {
-		ctx = bbservice.WithAccessToken(ctx, bbAccessToken)
-	}
-
-	client := bbservice.NewAPIClient(cienv.IsInBitbucketPipeline())
 	return build, client, ctx, nil
 }
 
