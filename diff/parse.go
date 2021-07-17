@@ -372,8 +372,17 @@ func readline(r *bufio.Reader) (string, error) {
 		return "", err
 	}
 	// consume all remaining line content
-	for isPrefix {
-		_, isPrefix, _ = r.ReadLine()
+	if isPrefix {
+		l := make([]byte, len(line))
+		copy(l, line)
+		for isPrefix {
+			line, isPrefix, err = r.ReadLine()
+			if err != nil {
+				return "", err
+			}
+			l = append(l, line...)
+		}
+		line = l
 	}
 	return string(line), nil
 }
