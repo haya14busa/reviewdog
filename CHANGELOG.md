@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### :sparkles: Release Note <!-- optional -->
 
 ### :rocket: Enhancements
+- [#911](https://github.com/reviewdog/reviewdog/pull/911) Added bitbucket server (v1 api) support
 - Added support for Bitbucket Pipes executed within Pipelines.
 
 ---

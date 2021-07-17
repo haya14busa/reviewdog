@@ -17,6 +17,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	bitbucketv1 "github.com/gfleury/go-bitbucket-v1"
 	"golang.org/x/build/gerrit"
 	"golang.org/x/oauth2"
 
@@ -167,6 +168,13 @@ const (
 			  BITBUCKET_USER and BITBUCKET_PASSWORD
 		- For AccessToken Auth you need to set BITBUCKET_ACCESS_TOKEN 
 		Running on Bitbucket Server is not tested/supported yet.
+
+    "bitbucket-pr-review"
+		Report results to Bitbucket Server review comments.
+
+		1. Set BITBUCKET_USER and BITBUCKET_PASSWORD for basic authentication or
+		BITBUCKET_ACCESS_TOKEN for AccessToken Auth authentication.
+		2. Set BITBUCKET_API url
 
 	For GitHub Enterprise and self hosted GitLab, set
 	REVIEWDOG_INSECURE_SKIP_VERIFY to skip verifying SSL (please use this at your own risk)
@@ -369,6 +377,26 @@ github-pr-check reporter as a fallback.
 		}
 		opt.filterMode = filter.ModeNoFilter
 		ds = &reviewdog.EmptyDiff{}
+	case "bitbucket-pr-review":
+		build, cli, err := bitbucketv1BuildWithClient(ctx)
+		if err != nil {
+			return err
+		}
+		if build.PullRequest == 0 {
+			fmt.Fprintln(os.Stderr, "this is not PullRequest build.")
+			return nil
+		}
+
+		gc, err := bbservice.NewPullRequestCommenter(cli, build.Owner, build.Repo, build.PullRequest, build.SHA)
+		if err != nil {
+			return err
+		}
+
+		cs = reviewdog.MultiCommentService(gc, cs)
+		ds, err = bbservice.NewPullRequestDiff(cli, build.Owner, build.Repo, build.PullRequest, build.SHA)
+		if err != nil {
+			return err
+		}
 	case "local":
 		if opt.diffCmd == "" && opt.filterMode == filter.ModeNoFilter {
 			ds = &reviewdog.EmptyDiff{}
@@ -630,6 +658,34 @@ func bitbucketBuildWithClient(ctx context.Context) (*cienv.BuildInfo, *bitbucket
 
 	client := bbservice.NewAPIClient(cienv.IsInBitbucketPipeline(), cienv.IsInBitbucketPipe())
 	return build, client, ctx, nil
+}
+
+func bitbucketv1BuildWithClient(ctx context.Context) (*cienv.BuildInfo, *bitbucketv1.APIClient, error) {
+	build, _, err := cienv.GetBuildInfo()
+	if err != nil {
+		return nil, nil, err
+	}
+
+	bbBasePath := os.Getenv("BITBUCKET_API")
+	if bbBasePath == "" {
+		return nil, nil, errors.New("cannot get bitbucket v1 api address from environment variable. Set BITBUCKET_API ?")
+	}
+
+	bbUser := os.Getenv("BITBUCKET_USER")
+	bbPass := os.Getenv("BITBUCKET_PASSWORD")
+	bbAccessToken := os.Getenv("BITBUCKET_ACCESS_TOKEN")
+
+	if bbUser != "" && bbPass != "" {
+		basicAuth := bitbucketv1.BasicAuth{UserName: bbUser, Password: bbPass}
+		ctx = context.WithValue(ctx, bitbucketv1.ContextBasicAuth, basicAuth)
+	}
+
+	if bbAccessToken != "" {
+		ctx = context.WithValue(ctx, bitbucketv1.ContextAccessToken, bbAccessToken)
+	}
+
+	client := bitbucketv1.NewAPIClient(ctx, bitbucketv1.NewConfiguration(bbBasePath))
+	return build, client, nil
 }
 
 func fetchMergeRequestIDFromCommit(cli *gitlab.Client, projectID, sha string) (id int, err error) {
